@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Resume - Manish Kumar Jain</title>
+    <style>
+        /* Base Styling & Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            padding-top: 70px; /* Space for fixed navbar */
+        }
+
+        /* 1. Top Navigation Bar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background-color: #0f172a; /* Dark Blue */
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0 50px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .navbar a {
+            color: #ffffff;
+            text-decoration: none;
+            margin-left: 30px;
+            font-weight: 500;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+        .navbar a:hover {
+            color: #38bdf8; /* Accent Cyan/Blue */
+        }
+
+        /* Main Container layout */
+        .page-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            display: flex;
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        /* 2. Left Sidebar */
+        .sidebar {
+            width: 30%;
+            background-color: #1e293b; /* Medium Slate Blue */
+            color: #ffffff;
+            border-radius: 12px;
+            padding: 40px 25px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .profile-img-container {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 4px solid #38bdf8;
+            margin: 0 auto 20px auto;
+            overflow: hidden;
+            background-color: #334155;
+        }
+        .profile-img-container svg {
+            width: 100%;
+            height: 100%;
+            fill: #e2e8f0;
+        }
+        .sidebar h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #ffffff;
+        }
+        .sidebar p.subtitle {
+            font-size: 14px;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        .contact-links {
+            text-align: left;
+            border-top: 1px solid #334155;
+            padding-top: 25px;
+        }
+        .contact-item {
+            margin-bottom: 20px;
+        }
+        .contact-item span {
+            display: block;
+            font-size: 11px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .contact-item a, .contact-item p {
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 14px;
+            word-break: break-all;
+            transition: color 0.2s ease;
+        }
+        .contact-item a:hover {
+            color: #38bdf8;
+        }
+
+        /* 3. Right Main Section */
+        .main-content {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        .content-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+        .section-title {
+            font-size: 22px;
+            color: #0f172a;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background-color: #0284c7;
+        }
+        
+        .about-text {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #475569;
+        }
+
+        /* Timeline Items (Experience & Education) */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 20px;
+            border-left: 2px solid #e2e8f0;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 6px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #0284c7;
+        }
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 5px;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .role-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+        .company-name {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+        .date-badge {
+            font-size: 12px;
+            background-color: #f0fdf4;
+            color: #166534;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .bullet-points {
+            list-style-type: none;
+        }
+        .bullet-points li {
+            position: relative;
+            padding-left: 15px;
+            font-size: 14.5px;
+            color: #475569;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        .bullet-points li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #0284c7;
+            font-weight: bold;
+        }
+
+        /* 4. Interactive Skills Filter Section */
+        .filter-buttons {
+            margin-bottom: 25px;
+            display: flex;
+            gap: 10px;
+        }
+        .filter-btn {
+            background-color: #f1f5f9;
+            color: #475569;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+        .filter-btn:hover {
+            background-color: #e2e8f0;
+        }
+        .filter-btn.active {
+            background-color: #0284c7;
+            color: #ffffff;
+        }
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .skill-node {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: #334155;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        .skill-node span.level-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        .skill-node[data-level="advanced"] span.level-dot { background-color: #22c55e; }
+        .skill-node[data-level="intermediate"] span.level-dot { background-color: #eab308; }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 900px) {
+            .page-container {
+                flex-direction: column;
+            }
+            .sidebar, .main-content {
+                width: 100%;
+            }
+            .sidebar {
+                position: static;
+            }
+            .navbar {
+                justify-content: center;
+                padding: 0;
+            }
+            .navbar a {
+                margin: 0 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. Top Navigation Bar -->
+    <nav class="navbar">
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+        <a href="#education">Education</a>
+        <a href="#skills">Skills</a>
+    </nav>
+
+    <div class="page-container">
+        
+        <!-- 2. Left Sidebar -->
+        <aside class="sidebar">
+            <div class="profile-img-container">
+                <!-- Custom clean placeholder SVG graphic mimicking a modern profile avatar -->
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+            </div>
+            <h1>Manish Kumar Jain</h1>
+            <p class="subtitle">Professional Accountant</p>
+            
+            <div class="contact-links">
+                <div class="contact-item">
+                    <span>Phone</span>
+                    <a href="tel:+917665954095">(+91) 7665954095</a>
+                </div>
+                <div class="contact-item">
+                    <span>Email</span>
+                    <a href="mailto:manishjainl6071@gmail.com">manishjainl6071@gmail.com</a>
+                </div>
+                <div class="contact-item">
+                    <span>Home Address</span>
+                    <p>33-B, Laxmi Nagar Paota C Road, 342001 Jodhpur (India)</p>
+                </div>
+                <div class="contact-item">
+                    <span>Nationality / Bio</span>
+                    <p>Indian | Male</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Right Main Section -->
+        <main class="main-content">
+            
+            <!-- About Section -->
+            <section id="about" class="content-card">
+                <h2 class="section-title">About Me</h2>
+                <p class="about-text">
+                    An experienced Commerce Graduate with a demonstrated history of working in the Financial Industry. Skilled in Tally, Accounting Tools, MS Excel, and Financial Modelling. I have experience in the field of Bookkeeping, Accounting, Taxation, Audit, Compliance, Financial Statement Preparation, Financial Reporting, Reconciliation, and other Financial Services.
+                </p>
+            </section>
+
+            <!-- 3. Work Experience Section -->
+            <section id="experience" class="content-card">
+                <h2 class="section-title">Work Experience</h2>
+                <div class="timeline">
+                    
+                    <!-- Job 1 -->
+                    <div class="timeline-item">
+                        <div class="timeline-header">
+                            <span class="role-title">Accountant</span>
+                            <span class="date-badge">2018 - Current</span>
+                        </div>
+                        <div class="company-name">A.M.M. & Co | Jodhpur, India</div>
+                        <ul class="bullet-points">
+                            <li>Providing services of Bookkeeping and Accounting.</li>
+                            <li>Audit planning including obtaining understanding of the business and industry, identifying potential risks and framing responses to the risks identified.</li>
+                            <li>Preparation and Filing of Direct and Indirect Tax Statements.</li>
+                            <li>Performing Financial Audit, Tax Audit, Internal Audit, Statutory Audit and Stock Audit.</li>
+                            <li>Preparation and Reporting of Financial Statements.</li>
+                            <li>Reconciliation of GST Returns.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Job 2 -->
+                    <div class="timeline-item">
+                        <div class="timeline-header">
+                            <span class="role-title">Bookkeeper</span>
+                            <span class="date-badge">2015 - 2017</span>
+                        </div>
+                        <div class="company-name">Shakun Motors (Authorised Dealer of Volkswagen) | Jodhpur, India</div>
+                        <ul class="bullet-points">
+                            <li>Providing services of Bookkeeping and Accounting.</li>
+                            <li>Preparation and Reporting of Financial Statements.</li>
+                            <li>Reconciliation of Bank Statements.</li>
+                            <li>Preparation of Tax Statements.</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Education Section -->
+            <section id="education" class="content-card">
+                <h2 class="section-title">Education & Training</h2>
+                <div class="timeline">
+                    
+                    <!-- Degree 1 -->
+                    <div class="timeline-item">
+                        <div class="timeline-header">
+                            <span class="role-title">CA Intermediary</span>
+                            <span class="date-badge">2014</span>
+                        </div>
+                        <div class="company-name">The Institute of Chartered Accountants of India</div>
+                    </div>
+
+                    <!-- Degree 2 -->
+                    <div class="timeline-item">
+                        <div class="timeline-header">
+                            <span class="role-title">Bachelor of Commerce</span>
+                            <span class="date-badge">2012 - 2015</span>
+                        </div>
+                        <div class="company-name">Jai Narain Vyas University | India</div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- 4. Interactive Skills Section -->
+            <section id="skills" class="content-card">
+                <h2 class="section-title">Skills & Competencies</h2>
+                
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="filterSkills('all', this)">All Skills</button>
+                    <button class="filter-btn" onclick="filterSkills('advanced', this)">Advanced</button>
+                    <button class="filter-btn" onclick="filterSkills('intermediate', this)">Intermediate</button>
+                </div>
+
+                <div class="skills-grid" id="skillsContainer">
+                    <div class="skill-node" data-level="advanced"><span class="level-dot"></span>Tally</div>
+                    <div class="skill-node" data-level="advanced"><span class="level-dot"></span>Bookkeeping</div>
+                    <div class="skill-node" data-level="advanced"><span class="level-dot"></span>Accounting Tools</div>
+                    <div class="skill-node" data-level="advanced"><span class="level-dot"></span>Taxation</div>
+                    <div class="skill-node" data-level="advanced"><span class="level-dot"></span>Reconciliation</div>
+                    <div class="skill-node" data-level="intermediate"><span class="level-dot"></span>MS Excel</div>
+                    <div class="skill-node" data-level="intermediate"><span class="level-dot"></span>Financial Modelling</div>
+                    <div class="skill-node" data-level="intermediate"><span class="level-dot"></span>Audit & Compliance</div>
+                    <div class="skill-node" data-level="intermediate"><span class="level-dot"></span>Financial Reporting</div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- JavaScript for Interactivity -->
+    <script>
+        function filterSkills(level, button) {
+            // Update active status on filter buttons
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            // Filter logic for skills nodes
+            const skills = document.querySelectorAll('.skill-node');
+            skills.forEach(skill => {
+                if (level === 'all') {
+                    skill.style.display = 'flex';
+                    skill.style.opacity = '1';
+                } else {
+                    if (skill.getAttribute('data-level') === level) {
+                        skill.style.display = 'flex';
+                        skill.style.opacity = '1';
+                    } else {
+                        skill.style.display = 'none';
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
